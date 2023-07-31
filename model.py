@@ -251,12 +251,12 @@ class Model:
     @staticmethod
     @jit(nopython=True, fastmath=True, nogil=True)
     def screen(v):
-        return np.column_stack(((v[:, 0] + 1) / 2 * 1000, (1 - (v[:, 1] + 1) / 2) * 800))
+        return np.column_stack((((v[:, 0] + 1) / 2) * 1000, (1 - (v[:, 1] + 1) / 2) * 800))
 
     @staticmethod
     @jit(nopython=True, fastmath=True, nogil=True)
     def three_to_two(v):
-        return np.column_stack(((v[:, 0] / v[:, 2]), (v[:, 1] / v[:, 2])))
+        return np.column_stack(((v[:, 0] / (v[:, 2] + 1)), (v[:, 1] / (v[:, 2] + 1))))
 
     @staticmethod
     def color(_color):
@@ -332,10 +332,13 @@ class Model:
 display = pygame._sdl2.Window('Pygame 3D Renderer', (1000, 800))
 renderer = pygame._sdl2.Renderer(display)
 
-model1 = Model("Tree/model.obj", "Tree/model.mtl")
+model1 = Model("Cube/C.obj", "Cube/C.mtl")
 model1.direction = glm.vec3(.0, .0, .0)
 
-models = [model1]
+model2 = Model("Model/model.obj", "Model/model.mtl")
+model2.direction = glm.vec3(-.01, .0, .0)
+
+models = [model1, model2]
 
 clock = pygame.time.Clock()
 
